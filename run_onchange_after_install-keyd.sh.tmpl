@@ -1,0 +1,22 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# keyd-default.conf checksum: {{ include ".chezmoitemplates/keyd-default.conf" | sha256sum }}
+set -eu
+
+target=/etc/keyd/default.conf
+tmp="$(mktemp)"
+trap 'rm -f "$tmp"' EXIT HUP INT TERM
+
+cat >"$tmp" <<'KEYD_CONFIG'
+{{ include ".chezmoitemplates/keyd-default.conf" -}}
+KEYD_CONFIG
+
+keyd check "$tmp"
+
+if [ -r "$target" ] && cmp -s "$tmp" "$target"; then
+    exit 0
+fi
+
+sudo install -o root -g root -m 0644 "$tmp" "$target"
+sudo keyd reload
+{{- end }}

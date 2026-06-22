@@ -1,0 +1,15 @@
+    layout {
+        gaps 16 // Gap between windows
+        center-focused-column "on-overflow" // Center focused column when it would otherwise overflow
+        always-center-single-column // Center the column when it's the only one on screen
+
+        background-color "transparent" // <- needed for noctalia-shell to set wallpaper
+
+        preset-column-widths {
+            proportion 0.33333
+            proportion 0.5
+            proportion 0.66667
+        }
+
+        struts {}
+    }

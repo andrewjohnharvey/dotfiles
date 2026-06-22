@@ -1,0 +1,147 @@
+binds {
+
+    // ────────────── Keybindings ──────────────
+    // https://github.com/YaLTeR/niri/wiki/Configuration:-Key-Bindings
+
+    // ─── noctalia-shell keybinds ───
+    // https://docs.noctalia.dev/getting-started/keybinds/
+
+    Mod+Shift+ESCAPE                     { show-hotkey-overlay; }
+
+    // ─── Applications ───
+    Mod+Return                          hotkey-overlay-title="Open Terminal: Ghostty" { spawn "ghostty"; }
+    Mod+Space                           hotkey-overlay-title="Open App Launcher: noctalia launcher" { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+    Mod+ALT+L                           hotkey-overlay-title="Lock Screen: noctalia lock" { spawn-sh "qs -c noctalia-shell ipc call lockScreen lock"; }
+    Mod+Shift+Q                        hotkey-overlay-title="Session Menu: noctalia sessionMenu" { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+
+    // Please choose your own file manager.
+    Mod+E                               hotkey-overlay-title="File Manager: Nautilus" { spawn "nautilus"; }
+
+    // ─── Media Controls ───
+    XF86AudioRaiseVolume                allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }
+    XF86AudioLowerVolume                allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease"; }
+    XF86AudioMute                       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput"; }
+    XF86AudioMicMute                    allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
+    XF86AudioNext                       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media next"; }
+    XF86AudioPrev                       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media previous"; }
+    XF86AudioPlay                       allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+    XF86AudioPause                      allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+
+    // ─── Brightness Controls ───
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
+
+    // ─── Window Movement and Focus ───
+    // Focus/move/resize live on the Paneru-style Meh/Hyper layer below.
+    // Mod+H/J/K/L, Mod+arrows, Mod+Ctrl+* duplicates removed so the bare
+    // Cmd+arrow / Cmd+letter chords are free for the keyd `mac` layer.
+
+    Mod+Q                               { close-window; }
+
+    Ctrl+Shift+Alt+Home                 { focus-column-first; }
+    Ctrl+Shift+Alt+End                  { focus-column-last; }
+    Mod+Ctrl+Shift+Alt+Home             { move-column-to-first; }
+    Mod+Ctrl+Shift+Alt+End              { move-column-to-last; }
+
+    Mod+Shift+Left                      { focus-monitor-left; }
+    Mod+Shift+Right                     { focus-monitor-right; }
+    Mod+Shift+UP                        { focus-monitor-up; }
+    Mod+Shift+Down                      { focus-monitor-down; }
+
+    Mod+Shift+CTRL+Left                 { move-column-to-monitor-left; }
+    Mod+Shift+CTRL+Right                { move-column-to-monitor-right; }
+    Mod+Shift+CTRL+UP                   { move-column-to-monitor-up; }
+    Mod+Shift+CTRL+Down                 { move-column-to-monitor-down; }
+
+    // ─── Workspace Switching ───
+    Mod+WheelScrollDown                 cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp                   cooldown-ms=150 { focus-workspace-up; }
+    Mod+CTRL+WheelScrollDown            cooldown-ms=150 { move-column-to-workspace-down; }
+    Mod+CTRL+WheelScrollUp              cooldown-ms=150 { move-column-to-workspace-up; }
+
+    Mod+WheelScrollRight                { focus-column-right; }
+    Mod+WheelScrollLeft                 { focus-column-left; }
+    Mod+CTRL+WheelScrollRight           { move-column-right; }
+    Mod+CTRL+WheelScrollLeft            { move-column-left; }
+
+    Mod+Shift+WheelScrollDown           { focus-column-right; }
+    Mod+Shift+WheelScrollUp             { focus-column-left; }
+    Mod+CTRL+Shift+WheelScrollDown      { move-column-right; }
+    Mod+CTRL+Shift+WheelScrollUp        { move-column-left; }
+
+    // Workspace switching moved to Meh (Ctrl+Shift+Alt) so bare Mod+1..9
+    // is free for Mac Cmd+1..9 (browser tab switching) via keyd.
+    Ctrl+Shift+Alt+1                    { focus-workspace 1; }
+    Ctrl+Shift+Alt+2                    { focus-workspace 2; }
+    Ctrl+Shift+Alt+3                    { focus-workspace 3; }
+    Ctrl+Shift+Alt+4                    { focus-workspace 4; }
+    Ctrl+Shift+Alt+5                    { focus-workspace 5; }
+    Ctrl+Shift+Alt+6                    { focus-workspace 6; }
+    Ctrl+Shift+Alt+7                    { focus-workspace 7; }
+    Ctrl+Shift+Alt+8                    { focus-workspace 8; }
+    Ctrl+Shift+Alt+9                    { focus-workspace 9; }
+
+    // Move column to workspace → Hyper (Meh + Mod).
+    Mod+Ctrl+Shift+Alt+1                { move-column-to-workspace 1; }
+    Mod+Ctrl+Shift+Alt+2                { move-column-to-workspace 2; }
+    Mod+Ctrl+Shift+Alt+3                { move-column-to-workspace 3; }
+    Mod+Ctrl+Shift+Alt+4                { move-column-to-workspace 4; }
+    Mod+Ctrl+Shift+Alt+5                { move-column-to-workspace 5; }
+    Mod+Ctrl+Shift+Alt+6                { move-column-to-workspace 6; }
+    Mod+Ctrl+Shift+Alt+7                { move-column-to-workspace 7; }
+    Mod+Ctrl+Shift+Alt+8                { move-column-to-workspace 8; }
+    Mod+Ctrl+Shift+Alt+9                { move-column-to-workspace 9; }
+
+    Ctrl+Shift+Alt+Tab                  { focus-workspace-previous; }
+
+    // ─── Layout Controls ───
+    // Mod+C center-column, Mod+T float, Mod+W tabbed display, Mod+F fullscreen
+    // removed — collide with Mac Cmd+C/T/W/F. Float lives on Meh+Space below.
+    // Fullscreen relocated to Hyper+F.
+    Mod+Ctrl+Shift+Alt+F                { fullscreen-window; }
+
+    Mod+Shift+Minus                     { set-window-height "-10%"; }
+    Mod+Shift+Equal                     { set-window-height "+10%"; }
+
+    // ─── Screenshots ───
+    CTRL+Shift+1                        { screenshot; }
+    CTRL+Shift+2                        { screenshot-screen; }
+    CTRL+Shift+3                        { screenshot-window; }
+
+    // ─── Emergency Escape Key ───
+    // Use this when a fullscreen app blocks your keybinds.
+    // It disables any active keyboard shortcut inhibitor, restoring control.
+    Mod+ESCAPE                          allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+
+    // ─── Exit / Power ───
+    CTRL+ALT+Delete                     { quit; } // Also quits Niri
+    Mod+Shift+P                         { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    Mod+O                               repeat=false { toggle-overview; }
+
+    // ─── Paneru-style bindings (mirrors mac setup) ───
+    // Meh  (Ctrl+Shift+Alt)       = stamp key
+    // Hyper (Mod+Ctrl+Shift+Alt)  = stamp + rightalt
+    // a/w/r/s = west/north/south/east
+
+    // Focus — meh + a/w/r/s
+    Ctrl+Shift+Alt+A                    { focus-column-left; }
+    Ctrl+Shift+Alt+W                    { focus-window-up; }
+    Ctrl+Shift+Alt+R                    { focus-window-down; }
+    Ctrl+Shift+Alt+S                    { focus-column-right; }
+
+    // Move/Swap — hyper + a/w/r/s
+    Mod+Ctrl+Shift+Alt+A                { move-column-left; }
+    Mod+Ctrl+Shift+Alt+W                { move-window-up; }
+    Mod+Ctrl+Shift+Alt+R                { move-window-down; }
+    Mod+Ctrl+Shift+Alt+S                { move-column-right; }
+
+    // Resize — meh + t/g
+    Ctrl+Shift+Alt+T                    { set-column-width "-10%"; }
+    Ctrl+Shift+Alt+G                    { set-column-width "+10%"; }
+
+    // Fullwidth — meh + f
+    Ctrl+Shift+Alt+F                    { maximize-column; }
+
+    // Float toggle — meh + space
+    Ctrl+Shift+Alt+Space                { toggle-window-floating; }
+}
