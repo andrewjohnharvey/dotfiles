@@ -5,3 +5,4 @@ packages:
       - ghostty
       - github-cli
       - keyd
+      - micro
