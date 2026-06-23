@@ -1,4 +1,13 @@
 packages:
   arch:
     pacman:
+      - bolt
       - ddcutil
+      - ghostty
+      - github-cli
+      - keyd
+      - tailscale
+      - yay
+      - zed
+    manual:
+      - codex

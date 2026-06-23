@@ -14,11 +14,24 @@ Niri is installed only on Linux. Its display configuration is currently scoped
 to the `thinkpad` hostname. The keyd configuration is validated and installed
 into `/etc/keyd/default.conf` with `sudo` only when its content changes.
 
-Required Arch-family packages are declared in `.chezmoidata/packages.yaml` and
-installed by chezmoi when that list changes. The `ddcutil` package supplies the
-udev permissions and kernel module configuration needed for external-monitor
-brightness control. On the ThinkPad, the brightness keys use DDC/CI for the
-ASUS XG32UCWMG and fall back to Noctalia for the laptop panel.
+Packages required by the managed configuration are declared in
+`.chezmoidata/packages.yaml` and installed by chezmoi when that list changes.
+The list intentionally excludes operating-system defaults, hardware drivers,
+and unrelated applications. Entries under `manual` are installed and updated
+by their vendor rather than Pacman; Codex uses OpenAI's standalone installer.
+
+The `ddcutil` package supplies the udev permissions and kernel module
+configuration needed for external-monitor brightness control. On the ThinkPad,
+the brightness keys use DDC/CI for the ASUS XG32UCWMG and fall back to Noctalia
+for the laptop panel.
+
+`bolt` provides Thunderbolt dock authorization. The Kensington SD2480T UUID is
+stored in `.chezmoidata/devices.yaml`; chezmoi enrolls it when visible and not
+already stored. Connect the dock and run `chezmoi apply` on a new ThinkPad.
+
+The Tailscale service is enabled and started automatically. Authentication is
+deliberately manual; on a new machine, run `sudo tailscale up --ssh` after
+applying the dotfiles.
 
 Fish's generated `fish_variables` file is intentionally not managed. Put
 portable Fish configuration in `config.fish`, `conf.d`, or `functions` instead.

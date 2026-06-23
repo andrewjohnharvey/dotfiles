@@ -1,0 +1,15 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+set -eu
+
+if ! command -v tailscale >/dev/null 2>&1; then
+    exit 0
+fi
+
+if systemctl is-enabled --quiet tailscaled.service \
+    && systemctl is-active --quiet tailscaled.service; then
+    exit 0
+fi
+
+sudo systemctl enable --now tailscaled.service
+{{- end }}
