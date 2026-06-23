@@ -28,8 +28,8 @@ binds {
     XF86AudioPause                      allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
 
     // ─── Brightness Controls ───
-    XF86MonBrightnessUp                 allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
-    XF86MonBrightnessDown               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
+    XF86MonBrightnessUp                 allow-when-locked=true { spawn "monitor-brightness" "up"; }
+    XF86MonBrightnessDown               allow-when-locked=true { spawn "monitor-brightness" "down"; }
 
     // ─── Window Movement and Focus ───
     // Focus/move/resize live on the Paneru-style Meh/Hyper layer below.
