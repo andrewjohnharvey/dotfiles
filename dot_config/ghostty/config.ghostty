@@ -1,0 +1,5 @@
+# keyd translates the macOS-style Right Super+C/V chords to Ctrl+C/V.
+# Consume them in Ghostty only when the clipboard action is available, so
+# Ctrl+C can still reach terminal applications and image paste can reach Codex.
+keybind = performable:ctrl+c=copy_to_clipboard:mixed
+keybind = performable:ctrl+v=paste_from_clipboard
