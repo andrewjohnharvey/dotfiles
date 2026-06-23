@@ -9,6 +9,13 @@
     scale 1 // No scaling (use 2 for HiDPI)
 }
 
+// ASUS XG32UCWMG: highest advertised refresh rate at native 4K resolution.
+// Match by monitor identity so this survives connector-name changes.
+output "ASUSTek COMPUTER INC XG32UCWMG TALMQV023962" {
+    mode "3840x2160@100.000"
+    scale 1.25
+}
+
 output "eDP-1" {
     scale 2
 }

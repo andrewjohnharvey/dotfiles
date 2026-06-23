@@ -1,0 +1,18 @@
+{{- if and (eq .chezmoi.os "linux") (or (eq .chezmoi.osRelease.id "arch") (eq .chezmoi.osRelease.idLike "arch")) -}}
+#!/bin/sh
+# Package list checksum: {{ include ".chezmoidata/packages.yaml" | sha256sum }}
+set -eu
+
+missing=""
+{{ range .packages.arch.pacman -}}
+if ! pacman -Q {{ . | quote }} >/dev/null 2>&1; then
+    missing="$missing {{ . }}"
+fi
+{{ end -}}
+
+if [ -n "$missing" ]; then
+    # Package names are controlled by .chezmoidata/packages.yaml.
+    # shellcheck disable=SC2086
+    sudo pacman -S --needed --noconfirm $missing
+fi
+{{- end }}

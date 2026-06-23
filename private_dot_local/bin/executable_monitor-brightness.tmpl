@@ -1,0 +1,32 @@
+{{- if eq .chezmoi.os "linux" }}
+#!/bin/sh
+set -eu
+
+step=5
+monitor_model=XG32UCWMG
+
+case "${1:-}" in
+    up)
+        operator=+
+        fallback_action=increase
+        ;;
+    down)
+        operator=-
+        fallback_action=decrease
+        ;;
+    *)
+        echo "usage: monitor-brightness up|down" >&2
+        exit 2
+        ;;
+esac
+
+# Prefer hardware DDC/CI control when the external ASUS display is connected.
+# Match by model rather than display number because enumeration order can change.
+if command -v ddcutil >/dev/null 2>&1 \
+    && ddcutil --model "$monitor_model" setvcp 10 "$operator" "$step" >/dev/null 2>&1; then
+    exit 0
+fi
+
+# Fall back to Noctalia's backlight control for the laptop panel.
+exec qs -c noctalia-shell ipc call brightness "$fallback_action"
+{{- end }}
