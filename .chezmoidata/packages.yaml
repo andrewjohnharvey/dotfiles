@@ -2,3 +2,6 @@ packages:
   arch:
     pacman:
       - ddcutil
+      - ghostty
+      - github-cli
+      - keyd
