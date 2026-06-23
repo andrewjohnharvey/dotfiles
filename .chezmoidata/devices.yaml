@@ -1,0 +1,4 @@
+devices:
+  thunderbolt:
+    kensington_sd2480t:
+      uuid: 00338920-dfd8-1b00-ffff-ffffffffffff

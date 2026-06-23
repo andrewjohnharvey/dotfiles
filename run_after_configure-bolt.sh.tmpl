@@ -1,0 +1,25 @@
+{{- if and (eq .chezmoi.os "linux") (eq .chezmoi.hostname "thinkpad") -}}
+#!/bin/sh
+set -eu
+
+dock_uuid={{ .devices.thunderbolt.kensington_sd2480t.uuid | quote }}
+
+if ! command -v boltctl >/dev/null 2>&1; then
+    exit 0
+fi
+
+info="$(boltctl info "$dock_uuid" 2>/dev/null || true)"
+
+# A new machine cannot discover the UUID until the dock has been connected.
+# Since this is a run_after script, a later `chezmoi apply` will try again.
+if [ -z "$info" ]; then
+    echo "Thunderbolt dock $dock_uuid is not visible; skipping enrollment"
+    exit 0
+fi
+
+if printf '%s\n' "$info" | grep -q 'stored:'; then
+    exit 0
+fi
+
+sudo boltctl enroll "$dock_uuid"
+{{- end }}
