@@ -1,0 +1,55 @@
+onboarding = false
+
+[experimental]
+kitty_graphics = true
+
+[keys]
+prefix = "ctrl+n"
+# Use native Command shortcuts on macOS; ThinkPad keyd maps Command to Ctrl.
+new_tab = "{{ if eq .chezmoi.os "darwin" }}cmd{{ else }}ctrl{{ end }}+t"
+previous_tab = "ctrl+shift+tab"
+next_tab = "ctrl+tab"
+
+[[keys.command]]
+key = "{{ if eq .chezmoi.os "darwin" }}cmd{{ else }}ctrl{{ end }}+r"
+type = "plugin_action"
+command = "persiyanov.reviewr.toggle"
+
+[ui]
+agent_panel_sort = "priority"
+sidebar_width = 36
+sidebar_max_width = 48
+prompt_new_tab_name = true
+
+[ui.sidebar.agents]
+row_gap = 1
+rows = [
+  ["state_icon", { token = "tab", fg = "#FFFFFF", bold = true, dim = false }],
+  ["workspace", "state_text"],
+]
+
+# BEGIN jhochenbaum.hunkdiff — managed by `setup-keys`; edit via the plugin, not by hand
+[[keys.command]]
+key = "prefix+shift+h"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.review"
+description = "hunk: review changes"
+
+[[keys.command]]
+key = "prefix+shift+s"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.send-review"
+description = "hunk: send review to agent"
+
+[[keys.command]]
+key = "prefix+shift+c"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.review:commit"
+description = "hunk: review the last commit"
+
+[[keys.command]]
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "jhochenbaum.hunkdiff.review:staged"
+description = "hunk: review staged changes"
+# END jhochenbaum.hunkdiff

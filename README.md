@@ -52,3 +52,31 @@ macOS only
 ├── Brewfile
 └── optional Karabiner configuration
 ```
+
+## Herdr
+
+Herdr preferences and plugin shortcuts are managed in
+`dot_config/herdr/config.toml.tmpl`. macOS uses Command for new-tab and
+Reviewr shortcuts; Linux uses Ctrl. Other settings are shared.
+
+Install Herdr separately and install these plugins through Herdr before using
+their shortcuts:
+
+- `persiyanov/herdr-reviewr`: v0.21.0, commit
+  `bbeaac7b10fadd97278232b478470234d6078112`.
+- `jhochenbaum/herdr-hunk-diff`: v0.2.0, commit
+  `ad6f670b78887cd0becb473fd486945e5255c062`.
+
+Only `~/.config/herdr/config.toml` is managed. Plugin registries and binaries,
+sessions, sockets, and logs stay local to each machine. If a plugin changes
+its shortcuts in the live config, bring those edits back into the template
+before applying chezmoi again.
+
+Preview and apply just the Herdr configuration:
+
+```sh
+chezmoi diff ~/.config/herdr/config.toml
+chezmoi apply ~/.config/herdr/config.toml
+```
+
+Use Herdr's reload-config menu after applying to a running session.
