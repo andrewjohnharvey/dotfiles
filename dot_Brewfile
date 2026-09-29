@@ -1,0 +1,7 @@
+# Dependencies for the managed macOS configs. Run manually; no automatic upgrades.
+brew "chezmoi"
+brew "gh"
+brew "micro"
+brew "lazygit"
+brew "node" # Hunk Diff plugin runtime
+# GUI apps, window managers, fonts, and optional shells are installed separately.

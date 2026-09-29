@@ -1,3 +1,7 @@
+{{ if eq .chezmoi.os "darwin" -}}
+[include]
+	path = ~/.gitconfig.local
+{{ end -}}
 [credential "https://github.com"]
 	helper =
 	helper = !gh auth git-credential

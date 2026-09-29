@@ -1,0 +1,30 @@
+# Houston Theme for Ghostty
+# Based on Astro Houston (https://github.com/withastro/houston-vscode)
+# Ported by Andy Harvey
+
+background = #0d1117
+foreground = #e1e8f0
+cursor-color = #60a5fa
+cursor-text = #0d1117
+selection-background = #3b82f6
+selection-foreground = #f9fafb
+
+# Normal
+palette = 0=#0d1117
+palette = 1=#f87171
+palette = 2=#34d399
+palette = 3=#fbbf24
+palette = 4=#60a5fa
+palette = 5=#a78bfa
+palette = 6=#22d3ee
+palette = 7=#e1e8f0
+
+# Bright
+palette = 8=#374151
+palette = 9=#fca5a5
+palette = 10=#6ee7b7
+palette = 11=#fde047
+palette = 12=#93c5fd
+palette = 13=#c4b5fd
+palette = 14=#67e8f9
+palette = 15=#f9fafb

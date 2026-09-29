@@ -1,0 +1,28 @@
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "github.copilot.enable": {
+        "*": false
+    },
+    "augment.chat.userGuidelines": "always scan folders in directories that you are working in for AGENTS.md for useful context",
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "chatgpt.openOnStartup": true,
+    "chatgpt.apiBase": "",
+    "chatgpt.cliExecutable": "",
+    "explorer.confirmDragAndDrop": false,
+    "git.openRepositoryInParentFolders": "always",
+    "explorer.confirmDelete": false,
+    "claudeCode.preferredLocation": "panel",
+    "json.schemaDownload.trustedDomains": {
+        "https://schemastore.azurewebsites.net/": true,
+        "https://raw.githubusercontent.com/microsoft/vscode/": true,
+        "https://raw.githubusercontent.com/devcontainers/spec/": true,
+        "https://www.schemastore.org/": true,
+        "https://json.schemastore.org/": true,
+        "https://json-schema.org/": true,
+        "https://developer.microsoft.com/json-schemas/": true,
+        "https://biomejs.dev": true
+    },
+    "dbt.dbtIntegration": "core",
+    "chat.viewSessions.orientation": "stacked",
+    "editor.accessibilitySupport": "off"
+}

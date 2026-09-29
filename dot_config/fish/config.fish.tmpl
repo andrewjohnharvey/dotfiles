@@ -12,3 +12,13 @@ set -gx TERMINAL ghostty
 if command -q zeditor
     alias zed zeditor
 end
+{{ if eq .chezmoi.os "darwin" }}
+if test -x /opt/homebrew/bin/brew
+    /opt/homebrew/bin/brew shellenv | source
+else if test -x /usr/local/bin/brew
+    /usr/local/bin/brew shellenv | source
+end
+if test -r "$HOME/.config/fish/config.local.fish"
+    source "$HOME/.config/fish/config.local.fish"
+end
+{{ end -}}

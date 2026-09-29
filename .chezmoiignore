@@ -2,3 +2,23 @@
 .config/niri
 {{- end }}
 README.md
+
+{{ if eq .chezmoi.os "darwin" }}
+# Keep native clipboard shortcuts; do not deploy the Linux keyd overrides.
+.config/ghostty/config.ghostty
+.local/bin/monitor-brightness
+{{ else }}
+.zprofile
+.aerospace.toml
+.hammerspoon
+.config/karabiner
+.config/rift
+.config/ghostty/config
+.config/ghostty/themes
+.config/zed/keymap.json
+.config/zed/tasks.json
+.config/zed/themes
+Library
+.Brewfile
+{{ end }}
+scripts

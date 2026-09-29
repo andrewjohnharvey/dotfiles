@@ -1,0 +1,16 @@
+{
+    "security.workspace.trust.untrustedFiles": "open",
+    "github.copilot.enable": {
+        "*": false
+    },
+    "augment.chat.userGuidelines": "always scan folders in directories that you are working in for AGENTS.md for useful context",
+    "github.copilot.nextEditSuggestions.enabled": false,
+    "chatgpt.openOnStartup": true,
+    "chatgpt.apiBase": "",
+    "chatgpt.cliExecutable": "",
+    "explorer.confirmDragAndDrop": false,
+    "git.openRepositoryInParentFolders": "always",
+    "explorer.confirmDelete": false,
+    "cursor.composer.shouldChimeAfterChatFinishes": true,
+    "svelte.enable-ts-plugin": true
+}

@@ -1,3 +1,11 @@
+{{ if eq .chezmoi.os "darwin" -}}
+{{- $settings := include ".chezmoitemplates/zed-darwin.json" | fromJson -}}
+{{- $local := joinPath .chezmoi.homeDir ".config/chezmoi/zed-context-servers.json" -}}
+{{- if stat $local -}}
+{{- $_ := set $settings "context_servers" (include $local | fromJson) -}}
+{{- end -}}
+{{ $settings | toPrettyJson }}
+{{ else -}}
 // Zed settings
 //
 // For information on how to configure Zed, see the Zed
@@ -15,3 +23,4 @@
     "dark": "One Dark",
   },
 }
+{{ end -}}

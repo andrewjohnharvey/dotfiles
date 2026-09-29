@@ -1,0 +1,6 @@
+# Private local overrides and preservation files must never enter source state.
+*.local
+*.local.*
+**/zed-context-servers.json
+.DS_Store
+__pycache__/

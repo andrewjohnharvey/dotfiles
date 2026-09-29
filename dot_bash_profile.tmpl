@@ -1,0 +1,13 @@
+{{ if eq .chezmoi.os "darwin" -}}
+if [[ -r "$HOME/.bash_profile.local" ]]; then
+    source "$HOME/.bash_profile.local"
+else
+    [[ ! -r "$HOME/.bashrc" ]] || source "$HOME/.bashrc"
+fi
+{{ else -}}
+#
+# ~/.bash_profile
+#
+
+[[ -f ~/.bashrc ]] && . ~/.bashrc
+{{ end -}}

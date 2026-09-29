@@ -1,3 +1,11 @@
+{{ if eq .chezmoi.os "darwin" -}}
+if [[ -r "$HOME/.bashrc.local" ]]; then
+    source "$HOME/.bashrc.local"
+else
+    [[ $- != *i* ]] && return
+    alias ls="ls -G"
+fi
+{{ else -}}
 #
 # ~/.bashrc
 #
@@ -12,3 +20,4 @@ alias ls='ls --color=auto'
 {{- end }}
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+{{ end -}}
