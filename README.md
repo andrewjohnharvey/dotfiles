@@ -100,6 +100,31 @@ the upgrade commit, review/apply the config with chezmoi, and `mise install`.
 Keep previous binaries until verification succeeds. The local before inventory
 and shell backups are in `~/.local/state/thor-packages/2026-11-08/`.
 
-The migration is incomplete: Ubuntu gh needs sudo removal; Snaps and custom
+The migration is incomplete: Snaps and custom
 desktop builds remain in place, as do existing Ansible, Rust and AI app installs.
 See homelab `fleet/docs/thor-packages.md` for the precise remaining work.
+
+## Thor desktop app sources
+
+For developer tools, runtimes and CLIs, use mise first. For desktop apps, prefer:
+
+1. An official vendor AppImage with verified Linux ARM64 support and working in-app updates.
+2. An official vendor apt repository or .deb.
+3. Flatpak.
+
+If the AppImage lacks a working updater, use the next supported source. Keep
+one active install source per app; verify the new version launches and preserves
+its profile before retiring the old install.
+
+Andy may explicitly initiate in-app updates. Do not enable unattended updates
+or scheduled updaters. Record each accepted version, vendor release URL, ARM64
+architecture and SHA256 in the app's checked-in declaration. Verify vendor
+signatures/checksums where available. Use a versioned vendor download when an
+updater cannot supply a reproducible release artifact. Keep the previous image
+outside the active launcher path and back up app data before an update. Rollback
+restores the previous image/launcher and matching data backup if needed, then
+reverts the version declaration in Git. `mup` handles mise tools only.
+
+This source preference does not replace working desktop apps automatically.
+Ubuntu core, kernel, NVIDIA, CUDA and essential services retain their supported
+Ubuntu/NVIDIA sources.
