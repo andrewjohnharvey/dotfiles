@@ -15,4 +15,22 @@ if [ -n "$missing" ]; then
     # shellcheck disable=SC2086
     sudo pacman -S --needed --noconfirm $missing
 fi
+{{- else if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") -}}
+#!/bin/sh
+# Package list checksum: {{ include ".chezmoidata/packages.yaml" | sha256sum }}
+set -eu
+
+missing=""
+{{ range .packages.ubuntu.apt -}}
+if ! dpkg-query -W -f='${Status}' {{ . | quote }} 2>/dev/null | grep -qx 'install ok installed'; then
+    missing="$missing {{ . }}"
+fi
+{{ end -}}
+
+if [ -n "$missing" ]; then
+    sudo apt-get update
+    # Package names are controlled by .chezmoidata/packages.yaml.
+    # shellcheck disable=SC2086
+    sudo apt-get install -y $missing
+fi
 {{- end }}

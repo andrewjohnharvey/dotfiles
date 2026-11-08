@@ -2,3 +2,13 @@
 .config/niri
 {{- end }}
 README.md
+
+{{- if eq .chezmoi.hostname "thor" }}
+.config/niri/cfg
+.config/ghostty/config.ghostty
+.local/bin/monitor-brightness
+{{- else }}
+.config/niri/thinkpad-keybinds.kdl
+.config/niri-hdr
+.config/ghostty/config
+{{- end }}
