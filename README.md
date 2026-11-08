@@ -46,7 +46,7 @@ Niri HDR configuration is tracked separately and includes the same base desktop.
 Thor does not receive the ThinkPad's modular Niri config or monitor-brightness
 helper, which expects Noctalia rather than Thor's Omarchy Quickshell.
 
-The Ubuntu `apt` list uses Ubuntu package names (`gh`, not `github-cli`).
+The Ubuntu `apt` list uses Ubuntu package names for system/service prerequisites. Developer CLIs use the Thor-only mise config.
 Packages are installed only when missing. ARM64 vendor binaries and source
 builds are listed under `manual`; chezmoi does not build or replace those.
 The Niri/HDR binaries, Omarchy Quickshell, Event Horizon services/assets and
@@ -84,3 +84,22 @@ macOS only
 ├── Brewfile
 └── optional Karabiner configuration
 ```
+
+## Thor pinned developer tools
+
+Mise 2026.10.4 owns the exact versions in `dot_config/mise/config.toml.tmpl`.
+Bash and Zsh activate it; `mup --dry-run` previews upgrades, and `mup` asks before
+upgrading and re-pinning, then prints the config diff. Review major-version
+compatibility and copy the reviewed config into this template before committing.
+No upgrade scheduler is installed. Install mise with its official installer and
+`MISE_VERSION=v2026.10.4`, then restore this config and run `mise install`.
+
+Rollback: `mise use -g micro@2.0.14 && mise install`; verify `micro --version`.
+This was tested, then restored to 2.0.15. For a committed upgrade, `git revert`
+the upgrade commit, review/apply the config with chezmoi, and `mise install`.
+Keep previous binaries until verification succeeds. The local before inventory
+and shell backups are in `~/.local/state/thor-packages/2026-11-08/`.
+
+The migration is incomplete: Ubuntu gh needs sudo removal; Snaps and custom
+desktop builds remain in place, as do existing Ansible, Rust and AI app installs.
+See homelab `fleet/docs/thor-packages.md` for the precise remaining work.

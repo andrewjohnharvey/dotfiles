@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# Operate only on the global Thor config, never a project's tool versions.
+cd "$HOME/.config/mise"
+config="$PWD/config.toml"
+mise="$HOME/.local/bin/mise"
+if [[ ${1:-} == --dry-run && $# == 1 ]]; then
+    exec "$mise" upgrade --bump --dry-run
+fi
+if (( $# )); then echo 'Usage: mup [--dry-run]' >&2; exit 2; fi
+"$mise" upgrade --bump --dry-run
+read -r -p 'Install these upgrades and re-pin? [y/N] ' answer
+[[ $answer == y || $answer == Y ]] || exit 0
+backup=$(mktemp)
+trap 'rm -f "$backup"' EXIT
+cp "$config" "$backup"
+"$mise" upgrade --bump
+# Exact input pins retain exact precision when mise bumps them.
+diff -u "$backup" "$config" || [[ $? == 1 ]]
+echo 'Review this diff, then copy the config into the dotfiles source and commit.'

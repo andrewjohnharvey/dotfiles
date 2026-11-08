@@ -116,15 +116,18 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# >>> Codex installer >>>
-export PATH="$HOME/.local/bin:$PATH"
-# <<< Codex installer <<<
-. "$HOME/.cargo/env"
-
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
+# User tools: mise activation runs last so pinned tools take precedence.
+export PATH="$HOME/.local/bin:$HOME/.grok/bin:$HOME/.opencode/bin:$PATH"
+[[ -r "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 [[ -r "$HOME/.grok/completions/bash/grok.bash" ]] && source "$HOME/.grok/completions/bash/grok.bash"
-# <<< grok installer <<<
-
-# opencode
-export PATH="$HOME/.opencode/bin:$PATH"
+# Preserve order while removing duplicate PATH entries.
+_thor_path= _thor_seen=:
+IFS=: read -ra _thor_parts <<< "$PATH"
+for _thor_dir in "${_thor_parts[@]}"; do
+    [[ -n $_thor_dir && $_thor_seen != *":$_thor_dir:"* ]] || continue
+    _thor_path="${_thor_path:+$_thor_path:}$_thor_dir"
+    _thor_seen+="$_thor_dir:"
+done
+export PATH=$_thor_path
+unset _thor_path _thor_seen _thor_parts _thor_dir
+[[ -x "$HOME/.local/bin/mise" ]] && eval "$("$HOME/.local/bin/mise" activate bash)"

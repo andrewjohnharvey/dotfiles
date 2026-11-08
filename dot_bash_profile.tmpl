@@ -4,3 +4,14 @@
 {{- else }}
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 {{- end }}
+
+{{ if eq .chezmoi.hostname "thor" }}
+# .profile adds user paths after .bashrc; restore mise precedence for login shells.
+if [[ -x "$HOME/.local/bin/mise" ]]; then
+    if [[ $- == *i* ]]; then
+        eval "$("$HOME/.local/bin/mise" activate bash)"
+    else
+        eval "$("$HOME/.local/bin/mise" activate bash --shims)"
+    fi
+fi
+{{ end }}
