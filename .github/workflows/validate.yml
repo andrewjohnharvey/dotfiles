@@ -14,7 +14,8 @@ jobs:
         run: python3 -m unittest discover -s tests -v
       - name: Check Bash syntax and upgrade helper lint
         run: |
+          bash -n private_dot_local/bin/executable_huginn-mup
           bash -n private_dot_local/bin/executable_mup
           bash -n .chezmoitemplates/thor/bashrc
-          shellcheck private_dot_local/bin/executable_mup
+          shellcheck private_dot_local/bin/executable_mup private_dot_local/bin/executable_huginn-mup
           git diff --check

@@ -16,3 +16,9 @@ alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
 {{- end }}
+
+{{ if eq .chezmoi.hostname "huginn" }}
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+eval "$("$HOME/.local/bin/mise" activate bash)"
+mup() { "$HOME/.local/bin/huginn-mup" "$@"; }
+{{ end }}

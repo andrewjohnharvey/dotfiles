@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Huginn keeps a persistent rollback command; Thor retains its existing helper.
+if [[ -x "$HOME/.local/bin/huginn-mup" ]]; then
+    exec "$HOME/.local/bin/huginn-mup" "$@"
+fi
 if (( $# )) && [[ $# != 1 || $1 != --dry-run ]]; then
     echo 'Usage: mup [--dry-run]' >&2
     exit 2

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if (( $# )) && [[ $# != 1 || ( $1 != --dry-run && $1 != --rollback ) ]]; then
+    echo 'Usage: mup [--dry-run|--rollback]' >&2
+    exit 2
+fi
+cd "$HOME/.config/mise"
+config="$PWD/config.toml"
+mise="$HOME/.local/bin/mise"
+state="$HOME/.local/state/huginn-packages/upgrades"
+# mise also discovers ancestor and environment-specific configs after cd.
+# Fail closed rather than upgrading tools whose config we cannot back up or diff.
+"$mise" config ls --json | /usr/bin/python3 -c '
+import json
+from pathlib import Path
+import sys
+configs = json.load(sys.stdin)
+expected = Path(sys.argv[1]).resolve()
+if not configs or any(Path(item["path"]).resolve() != expected for item in configs):
+    raise SystemExit("mup requires only ~/.config/mise/config.toml; unexpected mise configs loaded")
+' "$config"
+# Environment version overrides are not persisted as exact pins by mise upgrade.
+for variable in "${!MISE_@}"; do
+    if [[ $variable == MISE_*_VERSION ]]; then
+        printf 'Unset %s before running mup.\n' "$variable" >&2
+        exit 2
+    fi
+done
+
+if [[ ${1:-} == --dry-run && $# == 1 ]]; then
+    exec "$mise" upgrade --bump --no-prune --dry-run
+fi
+if [[ ${1:-} == --rollback && $# == 1 ]]; then
+    test -f "$state/latest.toml"
+    cp "$config" "$state/before-rollback.toml"
+    cp "$state/latest.toml" "$config"
+    "$mise" install
+    diff -u "$state/before-rollback.toml" "$config" || [[ $? == 1 ]]
+    exit
+fi
+if (( $# )); then echo 'Usage: mup [--dry-run|--rollback]' >&2; exit 2; fi
+"$mise" upgrade --bump --no-prune --dry-run
+read -r -p 'Install these upgrades and re-pin? [y/N] ' answer
+[[ $answer == y || $answer == Y ]] || exit 0
+mkdir -p "$state"
+backup=$(mktemp "$state/config.XXXXXX.toml")
+cp "$config" "$backup"
+cp "$config" "$state/latest.toml"
+status=0
+"$mise" upgrade --bump --no-prune || status=$?
+diff -u "$backup" "$config" || { diff_status=$?; (( diff_status == 1 )) || status=$diff_status; }
+if (( status )); then
+    printf 'Upgrade failed; original config retained at %s\n' "$backup" >&2
+    exit "$status"
+fi
+echo 'Review this diff and copy the pins into the huginn dotfiles template.'

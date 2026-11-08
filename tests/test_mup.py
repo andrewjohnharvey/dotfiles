@@ -11,6 +11,7 @@ MUP = ROOT / "private_dot_local/bin/executable_mup"
 
 
 class MupTests(unittest.TestCase):
+    script = MUP
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
@@ -45,7 +46,7 @@ exit "${UPGRADE_STATUS:-0}"
 
     def run_mup(self, *args: str, answer: str = "", **env: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            ["bash", str(MUP), *args], input=answer, text=True,
+            ["bash", str(self.script), *args], input=answer, text=True,
             capture_output=True, cwd=self.project, env={**self.env, **env}, check=False,
         )
 
@@ -57,6 +58,17 @@ exit "${UPGRADE_STATUS:-0}"
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(self.calls(), [f"{self.config_dir}|upgrade --bump --no-prune --dry-run"])
         self.assertEqual(self.config.read_text(), self.original)
+
+    def test_shared_entry_point_delegates_arguments_to_huginn(self) -> None:
+        if self.script != MUP:
+            self.skipTest("shared entry point only")
+        helper = self.home / ".local/bin/huginn-mup"
+        helper.write_text('#!/bin/sh\nprintf "%s\\n" "$@"\nexit 23\n')
+        helper.chmod(0o755)
+        result = self.run_mup("--rollback")
+        self.assertEqual(result.returncode, 23)
+        self.assertEqual(result.stdout.strip(), "--rollback")
+        self.assertEqual(self.calls(), [])
 
     def test_decline_never_installs(self) -> None:
         result = self.run_mup(answer="n\n")
@@ -123,6 +135,54 @@ exit "${UPGRADE_STATUS:-0}"
                 result = self.run_mup(*args)
                 self.assertEqual(result.returncode, 2, result.stderr)
                 self.assertEqual(self.calls(), [])
+
+
+class HuginnMupTests(MupTests):
+    script = ROOT / "private_dot_local/bin/executable_huginn-mup"
+
+    def test_partial_failure_keeps_original_and_status(self) -> None:
+        result = self.run_mup(answer="Y\n", UPGRADE_STATUS="42")
+        self.assertEqual(result.returncode, 42, result.stderr)
+        state = self.home / ".local/state/huginn-packages/upgrades"
+        self.assertEqual((state / "latest.toml").read_text(), self.original)
+        backups = list(state.glob("config.*.toml"))
+        self.assertEqual(len(backups), 1)
+        self.assertEqual(backups[0].read_text(), self.original)
+        self.assertIn(str(backups[0]), result.stderr)
+        self.assertIn('+micro = "2.0.15"', result.stdout)
+
+    def test_rollback_restores_saved_config_and_retains_current(self) -> None:
+        self.assertEqual(self.run_mup(answer="y\n").returncode, 0)
+        # For rollback, the stand-in installs without modifying config.
+        mise = self.home / ".local/bin/mise"
+        mise.write_text(mise.read_text().replace(
+            "printf '[tools]", "if [[ $1 == install ]]; then exit 0; fi\nprintf '[tools]"))
+        result = self.run_mup("--rollback")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.config.read_text(), self.original)
+        state = self.home / ".local/state/huginn-packages/upgrades"
+        self.assertIn('2.0.15', (state / "before-rollback.toml").read_text())
+        self.assertEqual(self.calls()[-1], f"{self.config_dir}|install")
+
+    def test_rollback_works_when_managed_python_is_broken(self) -> None:
+        self.assertEqual(self.run_mup(answer="y\n").returncode, 0)
+        mise = self.home / ".local/bin/mise"
+        mise.write_text(mise.read_text().replace(
+            "printf '[tools]", "if [[ $1 == install ]]; then exit 0; fi\nprintf '[tools]"))
+        broken = self.home / "shims"
+        broken.mkdir()
+        python = broken / "python3"
+        python.write_text("#!/bin/sh\nexit 99\n")
+        python.chmod(0o755)
+        result = self.run_mup("--rollback", PATH=f"{broken}:{self.env['PATH']}")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.config.read_text(), self.original)
+
+    def test_rollback_without_backup_does_not_install(self) -> None:
+        result = self.run_mup("--rollback")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.config.read_text(), self.original)
 
 
 if __name__ == "__main__":
