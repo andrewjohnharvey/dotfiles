@@ -1,3 +1,6 @@
+{{- if eq .chezmoi.hostname "thor" -}}
+{{ include ".chezmoitemplates/thor/bashrc" }}
+{{- else -}}
 #
 # ~/.bashrc
 #
@@ -12,3 +15,4 @@ alias ls='ls --color=auto'
 {{- end }}
 alias grep='grep --color=auto'
 PS1='[\u@\h \W]\$ '
+{{- end }}

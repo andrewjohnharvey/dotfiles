@@ -1,3 +1,6 @@
+{{- if eq .chezmoi.hostname "thor" -}}
+{{ include ".chezmoitemplates/thor/niri.kdl" | replace "/home/andy" .chezmoi.homeDir }}
+{{- else -}}
 include "./cfg/animation.kdl"
 include "./cfg/autostart.kdl"
 include "./cfg/keybinds.kdl"
@@ -6,3 +9,4 @@ include "./cfg/display.kdl"
 include "./cfg/layout.kdl"
 include "./cfg/rules.kdl"
 include "./cfg/misc.kdl"
+{{- end }}

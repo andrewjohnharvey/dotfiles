@@ -11,3 +11,19 @@ packages:
       - zed
     manual:
       - codex
+  ubuntu:
+    apt:
+      - bolt
+      - ddcutil
+      - gh
+      - tailscale
+    # Existing ARM64 binaries/source builds; not provided by this apt list.
+    manual:
+      - codex
+      - ghostty
+      - keyd
+      - micro
+      - niri
+      - niri-hdr
+      - quickshell
+      - zed

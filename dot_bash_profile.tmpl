@@ -1,0 +1,6 @@
+# Load Ubuntu's login environment (including ~/.bashrc and user PATHs).
+{{- if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "ubuntu") }}
+[[ -f ~/.profile ]] && . ~/.profile
+{{- else }}
+[[ -f ~/.bashrc ]] && . ~/.bashrc
+{{- end }}
