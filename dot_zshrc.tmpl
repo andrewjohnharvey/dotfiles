@@ -1,3 +1,9 @@
 if [[ -r /usr/share/cachyos-zsh-config/cachyos-config.zsh ]]; then
     source /usr/share/cachyos-zsh-config/cachyos-config.zsh
 fi
+
+{{ if eq .chezmoi.hostname "huginn" }}
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+eval "$("$HOME/.local/bin/mise" activate zsh --shims)"
+mup() { "$HOME/.local/bin/huginn-mup" "$@"; }
+{{ end }}

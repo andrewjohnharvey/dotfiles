@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$HOME/.config/mise"
+config="$PWD/config.toml"
+mise="$HOME/.local/bin/mise"
+state="$HOME/.local/state/huginn-packages/upgrades"
+if [[ ${1:-} == --dry-run && $# == 1 ]]; then
+    exec "$mise" upgrade --bump --dry-run
+fi
+if [[ ${1:-} == --rollback && $# == 1 ]]; then
+    test -f "$state/latest.toml"
+    cp "$config" "$state/before-rollback.toml"
+    cp "$state/latest.toml" "$config"
+    "$mise" install
+    diff -u "$state/before-rollback.toml" "$config" || [[ $? == 1 ]]
+    exit
+fi
+if (( $# )); then echo 'Usage: mup [--dry-run|--rollback]' >&2; exit 2; fi
+"$mise" upgrade --bump --dry-run
+read -r -p 'Install these upgrades and re-pin? [y/N] ' answer
+[[ $answer == y || $answer == Y ]] || exit 0
+mkdir -p "$state"
+backup="$state/$(date -u +%Y%m%dT%H%M%S)-$$.toml"
+cp "$config" "$backup"
+cp "$config" "$state/latest.toml"
+"$mise" upgrade --bump
+diff -u "$backup" "$config" || [[ $? == 1 ]]
+echo 'Review this diff and copy the pins into the huginn dotfiles template.'

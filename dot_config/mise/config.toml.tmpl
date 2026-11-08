@@ -1,0 +1,15 @@
+{{ if eq .chezmoi.hostname "huginn" }}
+[tools]
+node = "26.12.1"
+python = "3.14.8"
+go = "1.27.3"
+bun = "1.3.11"
+codex = "0.167.0"
+cursor-agent = "2026.10.22-27dcf5f"
+opencode = "2.2.6"
+grok = "1.0.77"
+claude = "2.1.104"
+
+[settings.upgrade]
+auto_prune = false
+{{ end }}

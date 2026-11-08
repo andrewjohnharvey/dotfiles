@@ -4,3 +4,9 @@
 {{- else }}
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 {{- end }}
+
+{{ if eq .chezmoi.hostname "huginn" }}
+export PATH="$HOME/.local/bin:$HOME/.npm-global/bin:$PATH"
+eval "$("$HOME/.local/bin/mise" activate bash --shims)"
+mup() { "$HOME/.local/bin/huginn-mup" "$@"; }
+{{ end }}

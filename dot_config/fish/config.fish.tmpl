@@ -1,3 +1,45 @@
+{{ if eq .chezmoi.hostname "huginn" }}
+source /usr/share/cachyos-fish-config/cachyos-config.fish
+
+# overwrite greeting
+# potentially disabling fastfetch
+#function fish_greeting
+#    # smth smth
+#end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $HOME/node_modules/.bin $PATH
+
+# bind tab to accept autosuggestion, shift+tab for traditional completion
+bind tab accept-autosuggestion
+bind shift-tab complete
+
+# hermes
+fish_add_path -g $HOME/.hermes/hermes-agent/venv/bin
+
+# aliases
+alias ccd="claude --dangerously-skip-permissions"
+alias oc="openclaw"
+
+# T3 Code CLI (follow the runtime selected by T3's updater)
+function t3
+    set --local t3_version (jq --raw-output '.activeVersion' "$HOME/.t3/runtime/service-state.json")
+    set --local t3_cli "$HOME/.t3/runtime/versions/$t3_version/t3"
+    command "$t3_cli" $argv
+end
+
+# OpenClaw Completion
+test -f "/home/huginn/.openclaw/completions/openclaw.fish"; and source "/home/huginn/.openclaw/completions/openclaw.fish"
+
+
+# Pinned runtimes and coding agents take precedence.
+fish_add_path -g $HOME/.local/bin
+$HOME/.local/bin/mise activate fish | source
+function mup
+    $HOME/.local/bin/huginn-mup $argv
+end
+{{ else }}
 if test -r /usr/share/cachyos-fish-config/cachyos-config.fish
     source /usr/share/cachyos-fish-config/cachyos-config.fish
 end
@@ -12,3 +54,4 @@ set -gx TERMINAL ghostty
 if command -q zeditor
     alias zed zeditor
 end
+{{ end }}

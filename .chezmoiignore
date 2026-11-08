@@ -12,3 +12,11 @@ README.md
 .config/niri-hdr
 .config/ghostty/config
 {{- end }}
+
+{{ if ne .chezmoi.hostname "huginn" }}
+.config/mise
+.local/bin/huginn-mup
+.local/bin/mup
+{{ end }}
+
+HUGINN-PACKAGES.md
