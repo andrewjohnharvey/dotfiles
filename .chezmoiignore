@@ -13,10 +13,16 @@ README.md
 .config/ghostty/config
 {{- end }}
 
-{{ if ne .chezmoi.hostname "huginn" }}
+{{ if and (ne .chezmoi.hostname "thor") (ne .chezmoi.hostname "huginn") }}
 .config/mise
-.local/bin/huginn-mup
 .local/bin/mup
+{{ end }}
+
+# Repository validation files are not home-directory configuration.
+tests
+
+{{ if ne .chezmoi.hostname "huginn" }}
+.local/bin/huginn-mup
 {{ end }}
 
 HUGINN-PACKAGES.md

@@ -15,14 +15,13 @@ packages:
     apt:
       - bolt
       - ddcutil
-      - gh
       - tailscale
-    # Existing ARM64 binaries/source builds; not provided by this apt list.
+    # Developer CLIs are pinned in dot_config/mise/config.toml.tmpl.
+    # Unmigrated vendor apps and custom desktop builds:
     manual:
       - codex
       - ghostty
       - keyd
-      - micro
       - niri
       - niri-hdr
       - quickshell

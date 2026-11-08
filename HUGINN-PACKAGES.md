@@ -1,11 +1,13 @@
 # Huginn packages
 
-Applied on huginn, x86_64 CachyOS, on 2026-11-08. Merge performs no deployment.
+The original migration author reported applying this on huginn, x86_64
+CachyOS, on 2026-11-08. These historical machine checks were not repeated by
+the PR readiness review on Thor. Merge performs no deployment.
 Only huginn's template branches change. No homelab files or other machines changed.
 
 Pacman retains the OS, system dependencies and general packages. Mise 2026.10.4
 owns the nine exact runtime and coding-agent versions in the huginn config.
-Rust was absent; no Rust toolchain was added. Chezomoi 2.74.0 was installed through
+Rust was absent; no Rust toolchain was added. Chezmoi 2.74.0 was installed through
 mise only as an unactivated verification utility, not as a managed general package.
 
 Existing runtimes and agents were migrated at their installed versions. Each
@@ -18,7 +20,7 @@ exercise authenticated prompts or reopen the running T3 GUI.
 config, upgrades with exact pins, and prints the diff. Copy reviewed pins back
 into `dot_config/mise/config.toml.tmpl` before committing. No timer or automatic
 upgrade was added. Automatic upgrade pruning is disabled to retain rollback tools.
-The command is `~/.local/bin/huginn-mup`, with a `mup` symlink and shell functions.
+The command is `~/.local/bin/huginn-mup`, through the shared `mup` entry point and shell functions.
 
 `mup --rollback` restores the previous config from
 `~/.local/state/huginn-packages/upgrades/latest.toml` and runs `mise install`.
@@ -48,8 +50,9 @@ an official vendor AppImage only after verifying its in-app updater; otherwise
 keep pacman or use Flatpak. Record version, URL and SHA256 and retain the prior
 image before any future migration. Updates require Andy to start them.
 
-This PR branches from origin/main. It uses Thor PR #4's mise config path and host
-conditional structure, but does not include Thor's unmerged changes. Its command
-implementation has a huginn-specific name. When combining the PRs, retain both
-host branches in the config and allow each host in .chezmoiignore. Resolve the
-shared file additions by retaining both hosts, never replacing Thor's pins.
+Thor and Huginn have separate branches in the shared mise template. Neither
+host receives the other's pins. The shared `mup` entry point delegates to
+`huginn-mup` when that host-specific helper is installed. System `/usr/bin/python3` is required
+for the scope guard. Extra mise configs and version overrides must be removed
+before upgrading. Preview and upgrade use `--no-prune` to retain old binaries.
+A failed upgrade prints its partial diff and retains the original config.

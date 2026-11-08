@@ -46,7 +46,7 @@ Niri HDR configuration is tracked separately and includes the same base desktop.
 Thor does not receive the ThinkPad's modular Niri config or monitor-brightness
 helper, which expects Noctalia rather than Thor's Omarchy Quickshell.
 
-The Ubuntu `apt` list uses Ubuntu package names (`gh`, not `github-cli`).
+The Ubuntu `apt` list uses Ubuntu package names for system/service prerequisites. Developer CLIs use the Thor-only mise config.
 Packages are installed only when missing. ARM64 vendor binaries and source
 builds are listed under `manual`; chezmoi does not build or replace those.
 The Niri/HDR binaries, Omarchy Quickshell, Event Horizon services/assets and
@@ -84,3 +84,53 @@ macOS only
 ├── Brewfile
 └── optional Karabiner configuration
 ```
+
+## Thor pinned developer tools
+
+Mise 2026.10.4 owns the exact versions in `dot_config/mise/config.toml.tmpl`.
+Bash and Zsh activate it; `mup --dry-run` previews upgrades, and `mup` asks before
+upgrading and re-pinning, then prints the config diff. Review major-version
+compatibility and copy the reviewed config into this template before committing.
+`mup` requires Python 3 (provided by Ubuntu) for its scope check. It refuses
+to run when mise loads additional configs or tool-version environment overrides;
+resolve those overrides before retrying. It never upgrades a caller’s project.
+Previous tool versions are retained for rollback. If an upgrade fails, `mup`
+prints the partial diff and retains the original config at the reported backup
+path; review it before restoring the config and retrying.
+No upgrade scheduler is installed. Install mise with its official installer and
+`MISE_VERSION=v2026.10.4`, then restore this config and run `mise install`.
+
+Rollback: `mise use -g micro@2.0.14 && mise install`; verify `micro --version`.
+This was tested, then restored to 2.0.15. For a committed upgrade, `git revert`
+the upgrade commit, review/apply the config with chezmoi, and `mise install`.
+Keep previous binaries until verification succeeds. The local before inventory
+and shell backups are in `~/.local/state/thor-packages/2026-11-08/`.
+
+The migration is incomplete: Snaps and custom
+desktop builds remain in place, as do existing Ansible, Rust and AI app installs.
+See homelab `fleet/docs/thor-packages.md` for the precise remaining work.
+
+## Thor desktop app sources
+
+For developer tools, runtimes and CLIs, use mise first. For desktop apps, prefer:
+
+1. An official vendor AppImage with verified Linux ARM64 support and working in-app updates.
+2. An official vendor apt repository or .deb.
+3. Flatpak.
+
+If the AppImage lacks a working updater, use the next supported source. Keep
+one active install source per app; verify the new version launches and preserves
+its profile before retiring the old install.
+
+Andy may explicitly initiate in-app updates. Do not enable unattended updates
+or scheduled updaters. Record each accepted version, vendor release URL, ARM64
+architecture and SHA256 in the app's checked-in declaration. Verify vendor
+signatures/checksums where available. Use a versioned vendor download when an
+updater cannot supply a reproducible release artifact. Keep the previous image
+outside the active launcher path and back up app data before an update. Rollback
+restores the previous image/launcher and matching data backup if needed, then
+reverts the version declaration in Git. `mup` handles mise tools only.
+
+This source preference does not replace working desktop apps automatically.
+Ubuntu core, kernel, NVIDIA, CUDA and essential services retain their supported
+Ubuntu/NVIDIA sources.
