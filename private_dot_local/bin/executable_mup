@@ -1,20 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
+if (( $# )) && [[ $# != 1 || $1 != --dry-run ]]; then
+    echo 'Usage: mup [--dry-run]' >&2
+    exit 2
+fi
 # Operate only on the global Thor config, never a project's tool versions.
 cd "$HOME/.config/mise"
 config="$PWD/config.toml"
 mise="$HOME/.local/bin/mise"
+# mise also discovers ancestor and environment-specific configs after cd.
+# Fail closed rather than upgrading tools whose config we cannot back up or diff.
+"$mise" config ls --json | python3 -c '
+import json
+from pathlib import Path
+import sys
+configs = json.load(sys.stdin)
+expected = Path(sys.argv[1]).resolve()
+if not configs or any(Path(item["path"]).resolve() != expected for item in configs):
+    raise SystemExit("mup requires only ~/.config/mise/config.toml; unexpected mise configs loaded")
+' "$config"
+# Environment version overrides are not persisted as exact pins by mise upgrade.
+for variable in "${!MISE_@}"; do
+    if [[ $variable == MISE_*_VERSION ]]; then
+        printf 'Unset %s before running mup.\n' "$variable" >&2
+        exit 2
+    fi
+done
 if [[ ${1:-} == --dry-run && $# == 1 ]]; then
-    exec "$mise" upgrade --bump --dry-run
+    exec "$mise" upgrade --bump --no-prune --dry-run
 fi
-if (( $# )); then echo 'Usage: mup [--dry-run]' >&2; exit 2; fi
-"$mise" upgrade --bump --dry-run
+"$mise" upgrade --bump --no-prune --dry-run
 read -r -p 'Install these upgrades and re-pin? [y/N] ' answer
 [[ $answer == y || $answer == Y ]] || exit 0
-backup=$(mktemp)
-trap 'rm -f "$backup"' EXIT
+backup=$(mktemp "$config.mup.XXXXXX")
 cp "$config" "$backup"
-"$mise" upgrade --bump
+# A failed install may have already rewritten some pins. Keep the original for recovery.
+status=0
+"$mise" upgrade --bump --no-prune || status=$?
 # Exact input pins retain exact precision when mise bumps them.
-diff -u "$backup" "$config" || [[ $? == 1 ]]
+diff -u "$backup" "$config" || { diff_status=$?; (( diff_status == 1 )) || status=$diff_status; }
+if (( status )); then
+    printf 'Upgrade failed; original config retained at %s\n' "$backup" >&2
+    exit "$status"
+fi
+rm -f "$backup"
 echo 'Review this diff, then copy the config into the dotfiles source and commit.'

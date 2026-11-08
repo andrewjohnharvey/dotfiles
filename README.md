@@ -91,6 +91,12 @@ Mise 2026.10.4 owns the exact versions in `dot_config/mise/config.toml.tmpl`.
 Bash and Zsh activate it; `mup --dry-run` previews upgrades, and `mup` asks before
 upgrading and re-pinning, then prints the config diff. Review major-version
 compatibility and copy the reviewed config into this template before committing.
+`mup` requires Python 3 (provided by Ubuntu) for its scope check. It refuses
+to run when mise loads additional configs or tool-version environment overrides;
+resolve those overrides before retrying. It never upgrades a caller’s project.
+Previous tool versions are retained for rollback. If an upgrade fails, `mup`
+prints the partial diff and retains the original config at the reported backup
+path; review it before restoring the config and retrying.
 No upgrade scheduler is installed. Install mise with its official installer and
 `MISE_VERSION=v2026.10.4`, then restore this config and run `mise install`.
 

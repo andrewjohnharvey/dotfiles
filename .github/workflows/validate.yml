@@ -1,0 +1,20 @@
+name: Validate dotfiles
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test upgrade safety without installing tools
+        run: python3 -m unittest discover -s tests -v
+      - name: Check Bash syntax and upgrade helper lint
+        run: |
+          bash -n private_dot_local/bin/executable_mup
+          bash -n .chezmoitemplates/thor/bashrc
+          shellcheck private_dot_local/bin/executable_mup
+          git diff --check

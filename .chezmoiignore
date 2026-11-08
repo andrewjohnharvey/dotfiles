@@ -17,3 +17,6 @@ README.md
 .config/mise
 .local/bin/mup
 {{ end }}
+
+# Repository validation files are not home-directory configuration.
+tests
