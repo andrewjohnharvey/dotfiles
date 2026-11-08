@@ -12,3 +12,11 @@ README.md
 .config/niri-hdr
 .config/ghostty/config
 {{- end }}
+
+{{ if ne .chezmoi.hostname "thor" }}
+.config/mise
+.local/bin/mup
+{{ end }}
+
+# Repository validation files are not home-directory configuration.
+tests

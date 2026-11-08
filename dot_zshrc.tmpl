@@ -1,3 +1,7 @@
 if [[ -r /usr/share/cachyos-zsh-config/cachyos-config.zsh ]]; then
     source /usr/share/cachyos-zsh-config/cachyos-config.zsh
 fi
+
+{{ if eq .chezmoi.hostname "thor" }}
+[[ -x "$HOME/.local/bin/mise" ]] && eval "$("$HOME/.local/bin/mise" activate zsh)"
+{{ end }}
