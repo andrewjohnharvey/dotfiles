@@ -1,0 +1,28 @@
+{{- if eq .chezmoi.os "linux" -}}
+#!/bin/sh
+# Reruns when the unit changes:
+# {{ include "dot_config/systemd/user/taildrop-receive.service" | sha256sum }}
+set -eu
+
+if ! command -v tailscale >/dev/null 2>&1; then
+    exit 0
+fi
+
+# Taildrop only works on untagged nodes owned by the same user.
+tags=$(tailscale status --json 2>/dev/null \
+    | python3 -c 'import json, sys; print(" ".join(json.load(sys.stdin)["Self"].get("Tags") or []))' \
+    || true)
+if [ -n "$tags" ]; then
+    echo "taildrop-receive: skipped, this node is tagged ($tags)"
+    exit 0
+fi
+
+# The receiver runs as this user, so this user must be the Tailscale operator.
+if ! tailscale debug prefs 2>/dev/null | grep -q "\"OperatorUser\": \"$USER\""; then
+    sudo tailscale set --operator="$USER"
+fi
+
+systemctl --user daemon-reload
+systemctl --user enable taildrop-receive.service
+systemctl --user restart taildrop-receive.service
+{{- end }}
