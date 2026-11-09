@@ -1,0 +1,6 @@
+{{ if eq .chezmoi.hostname "thor" -}}
+#!/bin/sh
+set -eu
+systemctl --user daemon-reload
+systemctl --user enable --now niri-border-animation.service
+{{ end -}}

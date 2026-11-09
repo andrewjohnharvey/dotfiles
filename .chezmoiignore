@@ -26,3 +26,9 @@ tests
 {{ end }}
 
 HUGINN-PACKAGES.md
+
+{{ if ne .chezmoi.hostname "thor" }}
+.config/niri/animated-border.kdl
+.config/systemd/user/niri-border-animation.service
+.local/bin/niri-border-animation
+{{ end }}

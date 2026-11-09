@@ -134,3 +134,15 @@ reverts the version declaration in Git. `mup` handles mise tools only.
 This source preference does not replace working desktop apps automatically.
 Ubuntu core, kernel, NVIDIA, CUDA and essential services retain their supported
 Ubuntu/NVIDIA sources.
+
+### Thor OLED window edges
+
+Niri uses thin, dim teal edges. `niri-border-animation.service` rotates the
+focus-ring and border gradient by 3 degrees each second (one turn in two
+minutes), using Niri's live config reload. It updates only the generated
+`~/.config/niri/animated-border.kdl`; chezmoi creates that file once and leaves
+its runtime contents alone. The helper starts with the graphical session.
+
+To pause the rotation at its current angle, run
+`systemctl --user stop niri-border-animation.service`; use `start` to resume.
+The rotation changes color distribution, not the position of the edge.
