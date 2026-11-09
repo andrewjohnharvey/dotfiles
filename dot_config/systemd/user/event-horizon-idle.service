@@ -1,0 +1,20 @@
+[Unit]
+Description=Event Horizon idle timer (2-minute saver, 4-minute display off)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+UnsetEnvironment=LD_LIBRARY_PATH LD_PRELOAD
+ExecStart=/usr/bin/swayidle -w \
+    timeout 120 "/usr/bin/systemctl --user start event-horizon-screensaver.service" \
+    resume "/usr/bin/systemctl --user stop event-horizon-screensaver.service" \
+    timeout 240 "/usr/local/bin/niri msg action power-off-monitors" \
+    resume "/usr/local/bin/niri msg action power-on-monitors"
+ExecStopPost=-/usr/local/bin/niri msg action power-on-monitors
+ExecStopPost=/usr/bin/systemctl --user stop event-horizon-screensaver.service
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

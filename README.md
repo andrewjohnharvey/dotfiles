@@ -154,3 +154,8 @@ and one logical pixel tall, and the bar overlays windows without reserving
 space or resizing them. Its configuration and required artwork are managed
 under `dot_config/quickshell/omarchy-niri`. Restart with
 `systemctl --user restart omarchy-niri-shell.service` if needed.
+
+Thor starts the Event Horizon screensaver after two idle minutes and powers
+off the displays via Niri DPMS after four idle minutes total. Input wakes the
+displays and stops the saver. This does not lock or suspend the computer.
+The timer is managed in `dot_config/systemd/user/event-horizon-idle.service`.

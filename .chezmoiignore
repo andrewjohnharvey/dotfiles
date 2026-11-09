@@ -36,3 +36,7 @@ HUGINN-PACKAGES.md
 {{ if ne .chezmoi.hostname "thor" }}
 .config/quickshell/omarchy-niri
 {{ end }}
+
+{{ if ne .chezmoi.hostname "thor" }}
+.config/systemd/user/event-horizon-idle.service
+{{ end }}

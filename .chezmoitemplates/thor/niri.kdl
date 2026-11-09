@@ -319,5 +319,5 @@ include "/home/andy/.config/niri/animated-border.kdl"
 // ThinkPad keyboard bindings, adapted to installed applications.
 include "thinkpad-keybinds.kdl"
 
-// event-horizon-idle.service starts the saver at 2 minutes.
+// event-horizon-idle.service starts the saver at 2 minutes and powers off displays at 4.
 // Automatic locking and sleep are disabled; manual actions remain available.
