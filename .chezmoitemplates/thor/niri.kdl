@@ -154,18 +154,19 @@ layout {
     // `draw-border-with-background`.
 
     // You can change how the focus ring looks.
+    // Keep static edges thin and muted for the OLED display.
     focus-ring {
-        width 4
-        active-gradient from="#59E1E3" to="#29D398" angle=45
+        width 2
+        active-gradient from="#31585A" to="#285343" angle=45
         inactive-color "#00000000"
     }
 
     // You can also add a border. It's similar to the focus ring, but always visible.
     border {
         width 2
-        active-gradient from="#59E1E3" to="#29D398" angle=45
-        inactive-color "#59e1e355"
-        urgent-color "#E95678"
+        active-gradient from="#31585A" to="#285343" angle=45
+        inactive-color "#172323"
+        urgent-color "#8A4053"
     }
 
     // You can enable drop shadows for windows.
