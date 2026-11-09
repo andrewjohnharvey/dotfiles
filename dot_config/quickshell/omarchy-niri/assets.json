@@ -1,0 +1,11 @@
+{
+  "theme": "https://github.com/OldJobobo/omarchy-event-horizon-theme",
+  "commit": "3e306a897442da05c147f32ac98cf9e7896294ae",
+  "wallpaper": {
+    "path": "/home/andy/.config/quickshell/omarchy-niri/event-horizon.jpg",
+    "upstream": "backgrounds/01-event-horizon.jpg",
+    "sha256": "7b3e6c5eb72320c347934ecf97940dd927051f10dad8e091cd032b353b01fc12"
+  },
+  "lock_artwork": "unlock.png",
+  "font": "https://github.com/ryanoasis/nerd-fonts/releases/tag/v3.4.0"
+}

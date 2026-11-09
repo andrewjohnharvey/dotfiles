@@ -146,3 +146,11 @@ its runtime contents alone. The helper starts with the graphical session.
 To pause the rotation at its current angle, run
 `systemctl --user stop niri-border-animation.service`; use `start` to resume.
 The rotation changes color distribution, not the position of the edge.
+
+The Thor Quickshell top bar auto-hides on every output. Move the pointer to
+the topmost screen edge to reveal it; leaving the bar hides it after 400 ms.
+Tray menus keep the bar open until dismissed. The hidden trigger is transparent
+and one logical pixel tall, and the bar overlays windows without reserving
+space or resizing them. Its configuration and required artwork are managed
+under `dot_config/quickshell/omarchy-niri`. Restart with
+`systemctl --user restart omarchy-niri-shell.service` if needed.
