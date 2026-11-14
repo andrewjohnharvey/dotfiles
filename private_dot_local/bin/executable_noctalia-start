@@ -1,0 +1,7 @@
+#!/bin/sh
+# Snapshot roots can contain an older binary than the shared v5 settings.
+runtime="$HOME/.local/share/noctalia/runtime-5.4.0/usr/bin/noctalia"
+if [ -x "$runtime" ] && grep -Eq 'rootflags=[^ ]*subvol=[^ ]*/[.]snapshots/[0-9]+/snapshot' /proc/cmdline; then
+    exec "$runtime"
+fi
+exec /usr/bin/noctalia

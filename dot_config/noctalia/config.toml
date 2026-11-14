@@ -1,0 +1,28 @@
+# Native Noctalia v5. Legacy JSON settings are backed up and retained.
+[shell]
+font_family = "Adwaita Sans"
+telemetry_enabled = false
+
+[theme]
+mode = "dark"
+source = "builtin"
+builtin = "Noctalia"
+
+[wallpaper]
+enabled = true
+directory = "/home/ah/Pictures/Wallpapers"
+fill_mode = "crop"
+
+[wallpaper.default]
+path = "/home/ah/.local/share/backgrounds/noctalia-v4.png"
+
+[bar.default]
+position = "top"
+auto_hide = true
+background_opacity = 1.0
+margin_ends = 4
+margin_edge = 4
+radius = 12
+start = ["launcher", "clock", "sysmon", "active_window", "media"]
+center = ["workspaces"]
+end = ["tray", "notifications", "battery", "volume", "brightness", "control-center"]
