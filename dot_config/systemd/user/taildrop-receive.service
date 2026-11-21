@@ -1,0 +1,14 @@
+[Unit]
+Description=Save Taildrop files into the user's Taildrop directory
+
+[Service]
+# file get opens each received file as mode 0644 and does not chmod it.
+# UMask applies to that open, including files that arrive later in --loop.
+UMask=0077
+ExecStartPre=/usr/bin/install -d -m 0700 %h/Taildrop
+ExecStart=/usr/bin/tailscale file get --loop --conflict=rename %h/Taildrop
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

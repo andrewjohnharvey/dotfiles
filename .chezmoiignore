@@ -40,3 +40,7 @@ HUGINN-PACKAGES.md
 {{ if ne .chezmoi.hostname "thor" }}
 .config/systemd/user/event-horizon-idle.service
 {{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.config/systemd/user/taildrop-receive.service
+{{ end }}

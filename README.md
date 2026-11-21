@@ -34,6 +34,13 @@ The Tailscale service is enabled and started automatically. Authentication is
 deliberately manual; on a new machine, run `sudo tailscale up --ssh` after
 applying the dotfiles.
 
+On Linux, `taildrop-receive.service` saves incoming Taildrop files into
+`~/Taildrop`. The folder is mode 0700 and each file is mode 0600. After
+`chezmoi apply`, a script makes the login user the Tailscale operator (this
+asks for `sudo` once) and enables the user service. Tagged nodes cannot use
+Taildrop, so the script skips them. The unit is identical to
+`fleet/bootstrap/taildrop-receive.service` in homelab; change both together.
+
 Fish's generated `fish_variables` file is intentionally not managed. Put
 portable Fish configuration in `config.fish`, `conf.d`, or `functions` instead.
 
